@@ -30,21 +30,29 @@ g_stack <-
     ggplot(df_stack, aes(x = strain, y = per, fill = allele)) +
     geom_bar(position = "fill", stat = "identity") +
     theme_bw() +
-    labs(x = "Strain", y = "Percentage of predicted alleles")
+    labs(x = "Strain", y = "% of reads", color = "Strain")
+
+pos <- position_jitter(width = 0.3, seed = 1)
 
 g_point <-
     ggplot(df_point, aes(x = strain, y = alleleper, color = strain, label = barcode)) +
-    geom_point() +
-    geom_text_repel(show.legend = FALSE) +
+    geom_jitter(position = pos) +
+    # geom_text_repel(show.legend = FALSE, position = pos) +
     theme_bw() +
-    labs(x = "Strain", y = "Percentage of predicted alleles") +
+    theme(
+        text = element_text(size = 12),
+        axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14),
+        strip.text = element_text(size = 16, face = "bold")
+    ) +
+    labs(x = "Strain", y = "% of reads", color = "Strain") +
     facet_wrap(~allele)
 
 
-ggsave(g_stack, filename = "reports/stack_plot.png", width = 8, height = 5)
-ggsave(g_stack, filename = "reports/stack_plot.pdf", width = 8, height = 5)
-ggsave(g_point, filename = "reports/point_plot.png", width = 12, height = 8)
-ggsave(g_point, filename = "reports/point_plot.pdf", width = 12, height = 8)
+ggsave(g_stack, filename = "reports/stack_plot.png", width = 8, height = 4)
+ggsave(g_stack, filename = "reports/stack_plot.pdf", width = 8, height = 4)
+ggsave(g_point, filename = "reports/point_plot.png", width = 16, height = 4)
+ggsave(g_point, filename = "reports/point_plot.pdf", width = 16, height = 4)
 
 #####################################################################
 
@@ -64,7 +72,7 @@ g_stack <-
     # geom_bar(position = "fill", stat = "identity") +
     geom_text(aes(label = per), position = position_stack(vjust = 0.5)) +
     theme_bw() +
-    labs(title = "DAJIN1", x = "Strain", y = "Percentage of predicted alleles")
+    labs(title = "DAJIN1", x = "Strain", y = "% of reads")
 
 ggsave(g_stack, filename = "reports/stack_B6J_DAJIN1.png", width = 7, height = 6)
 ggsave(g_stack, filename = "reports/stack_B6J_DAJIN1.pdf", width = 7, height = 6)
