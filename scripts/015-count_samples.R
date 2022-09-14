@@ -3,7 +3,8 @@ pacman::p_load(tidyverse)
 df <- read_csv("reports/allele_number.csv.gz")
 
 df_filtered <- df %>%
-    filter(condition != "control")
+    filter(condition != "control") %>%
+    mutate(strain = str_to_upper(strain))
 
 # Total samples
 df_filtered %>%
@@ -17,7 +18,8 @@ df_samples <-
     select(strain, barcode) %>%
     distinct() %>%
     group_by(strain) %>%
-    count()
+    count() %>%
+    rename("#sample" = n)
 
 # samples that contains more than 10% deletion alleles
 
@@ -34,8 +36,11 @@ df_deletion <-
     distinct() %>%
     group_by(strain) %>%
     count() %>%
-    ungroup() %>%
-    mutate(sum = sum(n))
+    rename("#sample w/ deletion" = n)
 
-inner_join(df_samples, df_deletion, by = "strain") %>%
-    mutate(percentage = n.y / n.x * 100)
+df_summary <-
+    inner_join(df_samples, df_deletion, by = "strain") %>%
+    mutate(percentage = `#sample w/ deletion` / `#sample` * 100) %>%
+    mutate(percentage = round(percentage, digit = 1))
+
+write_csv(df_summary, "reports/table.csv")
