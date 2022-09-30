@@ -13,10 +13,18 @@ sed 1d data/barcode_strain.csv |
     tr "," " " |
     sort >tmp_barcode_strain
 
+cat data/available_mice.csv |
+    tr , - |
+    sort >tmp_available_mice
+
 cat tmp_dajin_prediction |
     sort |
     join - tmp_barcode_strain |
     tr "_ " "," |
+    awk -F, 'BEGIN{OFS=","}{$1=$2"-"$5","$1}1' |
+    sort -t , |
+    join -t , - tmp_available_mice |
+    cut -d, -f 2- |
     awk 'BEGIN{OFS=","; print "run","barcode","allele","read_id","strain","condition"}1' |
     gzip -c >reports/allele_number.csv.gz
 
