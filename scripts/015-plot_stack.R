@@ -39,7 +39,13 @@ iwalk(df_split, function(x, idx) {
         scale_x_discrete(labels = strain) +
         scale_y_continuous(labels = percent) +
         theme_bw() +
-        theme(legend.position = "bottom") +
+        theme(
+            text = element_text(size = 12),
+            axis.text = element_text(size = 16),
+            axis.title = element_text(size = 16),
+            strip.text = element_text(size = 16),
+            legend.position = "bottom"
+        ) +
         labs(x = "Strain", y = "% of reads", fill = "Allele")
 
     ggsave(g_stack, filename = str_glue("reports/stack_plot_{idx}.pdf"), width = 16, height = 4)
