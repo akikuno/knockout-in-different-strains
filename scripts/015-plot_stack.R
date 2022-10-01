@@ -29,19 +29,19 @@ iwalk(df_split, function(x, idx) {
 
     strain <- df_stack %>%
         select(barcode, strain) %>%
+        unite(id, strain:barcode, sep = "-") %>%
         distinct() %>%
-        pull(strain)
+        pull(id)
 
     g_stack <-
         ggplot(df_stack, aes(x = barcode, y = per, fill = allele)) +
         geom_bar(color = "black", position = "fill", stat = "identity", aes(fill = fill)) +
         scale_fill_identity(guide = "legend", labels = df_stack$allele, breaks = df_stack$fill) +
-        scale_x_discrete(labels = strain) +
+        scale_x_discrete(labels = strain, guide = guide_axis(angle = 90)) +
         scale_y_continuous(labels = percent) +
         theme_bw() +
         theme(
-            text = element_text(size = 12),
-            axis.text = element_text(size = 16),
+            axis.text.y = element_text(size = 16),
             axis.title = element_text(size = 16),
             strip.text = element_text(size = 16),
             legend.position = "bottom"
