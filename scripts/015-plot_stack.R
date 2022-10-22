@@ -48,6 +48,6 @@ iwalk(df_split, function(x, idx) {
         ) +
         labs(x = "Strain", y = "% of reads", fill = "Allele")
 
-    ggsave(g_stack, filename = str_glue("reports/stack_plot_{idx}.pdf"), width = 16, height = 4)
+    # ggsave(g_stack, filename = str_glue("reports/stack_plot_{idx}.pdf"), width = 16, height = 4)
     ggsave(g_stack, filename = str_glue("reports/stack_plot_{idx}.png"), width = 16, height = 4)
 })
